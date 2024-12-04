@@ -11,11 +11,9 @@
   <sup>*</sup> Equal Contribution
 </p>
 
-[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://compvis.github.io/CleanDIFT/)
-[![Paper](https://img.shields.io/badge/arXiv-PDF-b31b1b)](https://compvis.github.io/CleanDIFT/static/pdfs/cleandift.pdf)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://compvis.github.io/cleandift/)
+[![Paper](https://img.shields.io/badge/arXiv-PDF-b31b1b)](https://compvis.github.io/cleandift/static/pdfs/cleandift.pdf)
 [![Weights](https://img.shields.io/badge/HuggingFace-Weights-orange)](https://huggingface.co/CompVis/cleandift)
-
-
 
 This repository contains the official implementation of the paper "CleanDIFT: Diffusion Features without Noise".
 
@@ -23,18 +21,19 @@ We propose CleanDIFT, a novel method to extract noise-free, timestep-independent
 
 ![teaser](./docs/static/images/teaser_fig.png)
 
-
 ## 🚀 Usage
+
 ### Setup
+
 Just clone the repo and install the requirements via `pip install -r requirements.txt`, then you're ready to go.
 
 ### Training
 
-In order to train a feature extractor on your own, you can run `python train.py`. The training script expects your data to be stored in `./data` with the following format: Single level directory with images named `filename.jpg` and corresponding json files `filename.json` that contain the key `caption`. 
+In order to train a feature extractor on your own, you can run `python train.py`. The training script expects your data to be stored in `./data` with the following format: Single level directory with images named `filename.jpg` and corresponding json files `filename.json` that contain the key `caption`.
 
 ### Feature Extraction
 
-For feature extraction, please refer to one of the notebooks at [`notebooks`](https://github.com/CompVis/CleanDIFT/tree/main/notebooks). We demonstrate how to extract features and use them for semantic correspondence detection and depth prediction. 
+For feature extraction, please refer to one of the notebooks at [`notebooks`](https://github.com/CompVis/cleandift/tree/main/notebooks). We demonstrate how to extract features and use them for semantic correspondence detection and depth prediction.
 
 Our checkpoints are fully compatible with the `diffusers` library. If you already have a pipeline using SD 1.5 or SD 2.1 from `diffusers`, you can simply replace the U-Net state dict:
 
@@ -47,7 +46,6 @@ ckpt_pth = hf_hub_download(repo_id="CompVis/cleandift", filename="cleandift_sd21
 state_dict = load_file(ckpt_pth)
 unet.load_state_dict(state_dict, strict=True)
 ```
-
 
 ## 🎓 Citation
 
