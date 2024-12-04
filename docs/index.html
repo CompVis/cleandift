@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="CleanDIFT enables extracting Noise-Free, Timestep-Independent Diffusion Features">
+  <meta property="og:title" content="CleanDIFT: Diffusion Features without Noise"/>
+  <meta property="og:description" content="CleanDIFT enables extracting Noise-Free, Timestep-Independent Diffusion Features"/>
+  <meta property="og:url" content="https://compvis.github.io/CleanDIFT"/>
+
+   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+   <meta property="og:image" content="static/images/teaser_fig.png" />
+   <meta property="og:image:width" content="2700" />
+   <meta property="og:image:height" content="1324" />
+
+
+  <meta name="twitter:title" content="CleanDIFT: Diffusion Features without Noise">
+  <meta name="twitter:description" content="CleanDIFT enables extracting Noise-Free, Timestep-Independent Diffusion Features">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/teaser_fig.png">
+  <meta name="twitter:card" content="CleanDIFT enables extracting Noise-Free, Timestep-Independent Diffusion Features">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="Diffusion, Features, Noise-Free, Fine-Tuning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><text y=%221em%22 font-size=%2232%22>🧹</text></svg>">
+  <title>CleanDIFT: Diffusion Features without Noise</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="static/css/twentytwenty.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script src="static/js/jquery-3.2.1.min.js"></script>
+  <script src="static/js/jquery.event.move.js"></script>
+  <script src="static/js/jquery.twentytwenty.js"></script>
+</head>
+
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <p class="navbar-item is-size-7 has-text-grey-dark">
+            Related
+          </p>
+          <a class="navbar-item" style="margin-left: 15px;" href="https://frankfundel.github.io/CompVisDistillDIFT/">
+            DistillDIFT
+          </a>
+          <hr class="navbar-divider">
+          <p class="navbar-item is-size-7 has-text-grey-dark">
+            From the Authors
+          </p>
+          <a class="navbar-item" style="margin-left: 15px;" href="https://compvis.github.io/LoRAdapter/">
+            LoRAdapter
+          </a>
+          <a class="navbar-item" style="margin-left: 15px;" href="https://compvis.github.io/attribute-control/">
+            Attribute Control
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">🧹 CleanDIFT: Diffusion Features without Noise</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <a href="https://nickstracke.dev/" target="_blank">Nick Stracke</a><sup>*</sup>,</span>
+              <span class="author-block">
+                <a href="https://stefan-baumann.eu/" target="_blank">Stefan Andreas Baumann</a><sup>*</sup>,</span>
+              <span class="author-block">
+                <a href="https://bsky.app/profile/koljabauer.bsky.social" target="_blank">Kolja Bauer</a><sup>*</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ffundel.de/" target="_blank">Frank Fundel</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://ommer-lab.com/people/ommer/" target="_blank">Björn Ommer</a>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">CompVis @ LMU Munich</span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!--  PDF link -->
+                <span class="link-block">
+                  <a href="https://compvis.github.io/CleanDIFT/static/pdfs/cleandift.pdf" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+
+                <!-- Github link -->
+                <span class="link-block">
+                  <a href="https://github.com/CompVis/CleanDIFT" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                 <!--
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                -->
+
+                <!-- HF weights Link -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/CompVis/cleandift" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" 
+                      alt="Hugging Face" style="height: 20px;">
+                    </span>
+                    <span>Weights</span>
+                  </a>
+                </span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+
+            <img src="static/images/teaser_fig.png" alt="" style="width: 100%; height: auto;">
+          </div>
+          
+          </div>
+          
+          <div class="container is-max-desktop">
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+          <div class="content has-text-justified">
+            <p style="margin-bottom: 20px; margin-top: 10px;">
+              <span style="font-weight: bold; font-size: 1.3em;">TL;DR:</span> Diffusion models learn powerful world representations that have proven valuable for tasks like semantic correspondence detection, depth estimation, semantic segmentation, and classification.
+              However, diffusion models require noisy input images, which destroys information and introduces the noise level as a hyperparameter that needs to be tuned for each task.
+              We propose a novel method to extract <span style="font-weight: bold;">noise-free, timestep-independent features</span> by enabling diffusion models to work directly with clean input images. Our approach is efficient, training on a single GPU in just 30 minutes.
+            </p>
+
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Paper abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <p>
+              Internal features from large-scale pre-trained diffusion models have recently been established as powerful
+              semantic descriptors for a wide range of downstream tasks. Works that use these features generally need to
+              add noise to images before passing them through the model to obtain the semantic features, as the models
+              do not offer the most useful features when given images with little to no noise. We show that this noise
+              has a critical impact on the usefulness of these features that cannot be remedied by ensembling with
+              different random noises.
+              We address this issue by introducing a lightweight, unsupervised fine-tuning method that enables diffusion
+              backbones to provide high-quality, noise-free semantic features. We show that these features readily
+              outperform previous diffusion features by a wide margin in a wide variety of extraction setups and
+              downstream tasks, offering better performance than even ensemble-based methods at a fraction of the cost.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+
+
+
+
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Clean Features &rarr; Clean Predictions</h2>
+          <div class="content">
+
+            <p class="has-text-justified" style="font-size: 16px;">
+            We evaluate our features on a wide range of downstream tasks: unsupervised zero-shot semantic
+            correspondence, monocular depth estimation, semantic segmentation, and classification.
+            We compare our features against standard diffusion features, methods that combine diffusion features with
+            additional features, and non-diffusion-based approaches.
+            </p>
+
+            <div class="container is-max-desktop">
+              <div class="hero-body">
+                <div class="">
+                  <!-- Column Titles -->
+                  <div class="our-container no-margin">
+                    <div class="our-column depth">
+                      <h3 class="column-title small">Input Image</h3>
+                    </div>
+                    <div class="our-column depth">
+                        <h3 class="column-title small">Depth Estimation</h3>
+                    </div>
+                    <div class="our-column seg">
+                      <h3 class="column-title small">Input Image</h3>
+                  </div>
+                  <div class="our-column seg">
+                    <h3 class="column-title small">Semantic Segmentation</h3>
+                </div>
+                  </div>
+        
+        
+                  <!-- First row: Image and Slider -->
+                  <div class="our-container">
+                    <div class="our-column depth">
+                      <img src="static/images/depth/1/depth_input.png" alt="Input Image">
+                    </div>
+                    <div class="our-column depth">
+                      <div class="twentytwenty-container first">
+                        <div class="cmpcontent">
+                          <img src="static/images/depth/1/depth_sd.png">
+                        </div>
+                        <div class="cmpcontent">
+                          <img src="static/images/depth/1/depth_ours.png">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="our-column seg">
+                      <img src="static/images/sem_seg/image_66_2.png" alt="Input Image">
+                    </div>
+                    <div class="our-column seg">
+                      <div class="twentytwenty-container first">
+                        <div class="cmpcontent">
+                          <img src="static/images/sem_seg/mask_66_2_sd.png">
+                        </div>
+                        <div class="cmpcontent">
+                          <img src="static/images/sem_seg/mask_66_2_ours.png">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  <!-- Second row: Image and Slider -->
+                  <div class="our-container">
+                    <div class="our-column depth">
+                      <img src="static/images/depth/2/depth_input.png" alt="Input Image">
+                    </div>
+                    <div class="our-column depth">
+                      <div class="twentytwenty-container second">
+                        <div class="cmpcontent">
+                          <img src="static/images/depth/2/depth_sd.png">
+                        </div>
+                        <div class="cmpcontent">
+                          <img src="static/images/depth/2/depth_ours.png">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="our-column seg">
+                      <img src="static/images/sem_seg/image_0_0.png" alt="Input Image">
+                    </div>
+                    <div class="our-column seg">
+                      <div class="twentytwenty-container second">
+                        <div class="cmpcontent">
+                          <img src="static/images/sem_seg/mask_0_0_sd.png">
+                        </div>
+                        <div class="cmpcontent">
+                          <img src="static/images/sem_seg/mask_0_0_ours.png">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  <!-- Third row: Image and Slider -->
+                  <div class="our-container">
+                    <div class="our-column depth">
+                      <img src="static/images/depth/3/depth_input.png" alt="Input Image">
+                    </div>
+                    <div class="our-column depth">
+                      <div class="twentytwenty-container third">
+                        <div class="cmpcontent">
+                          <img src="static/images/depth/3/depth_sd.png">
+                        </div>
+                        <div class="cmpcontent">
+                          <img src="static/images/depth/3/depth_ours.png">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="our-column seg">
+                      <img src="static/images/sem_seg/image_51_2.png" alt="Input Image">
+                    </div>
+                    <div class="our-column seg">
+                      <div class="twentytwenty-container third">
+                        <div class="cmpcontent">
+                          <img src="static/images/sem_seg/mask_51_2_sd.png">
+                        </div>
+                        <div class="cmpcontent">
+                          <img src="static/images/sem_seg/mask_51_2_ours.png">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+          <script>
+            $(window).on('load', function () {
+        
+              $(".first").twentytwenty({
+                before_label: 'SD',
+                after_label: 'Ours',
+                default_offset_pct: 0.75,
+              });
+              $(".second").twentytwenty({
+                before_label: 'SD',
+                after_label: 'Ours',
+                default_offset_pct: 0.35,
+              });
+              $(".third").twentytwenty({
+                before_label: 'SD',
+                after_label: 'Ours',
+                default_offset_pct: 0.5,
+              });
+            });
+          </script>
+        
+          <style>
+            .image-slider-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+            }
+        
+            .input-image-container,
+            .slider-container {
+              flex: 1;
+              max-width: 48%;
+              /* Adjust this to control the width of the image/slider */
+            }
+        
+            .input-image-container img,
+            .slider-container img {
+              width: 100%;
+              height: auto;
+              display: block;
+              object-fit: cover;
+            }
+        
+            .twentytwenty-container {
+              width: 100%;
+              height: 100%;
+            }
+          </style>
+
+            <!--
+            <img src="static/images/depth_pred.png" alt="">
+            -->
+
+
+            <p class="has-text-justified" style="font-size: 16px;">
+              We compare Depth Estimation and Semantic Segmentation using linear probes on standard diffusion features and our CleanDIFT features.
+              Note how the CleanDIFT features are far less noisy when compared to the standard diffusion features.
+              Depth probes are trained on NYUv2 dataset, Segmentation probes on PASCAL VOC. Standard diffusion features use t=100 for Semantic Segmentation and t=300 for depth prediction.
+            </p>
+
+            <img src="static/images/correspondences.png" alt="" style="max-width: 70%; height: auto; margin-bottom: 20px;">
+            <p class="has-text-justified" style="font-size: 16px;">
+              Zero-Shot Semantic Correspondence matching using DIFT features with standard SD 2.1 (t=261) and our CleanDIFT
+              features.
+              Our clean features show significantly less incorrect matches than the standard diffusion features.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  
+
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">How it works</h2>
+          <div class="content has-text-justified">
+            <img src="static/images/architecture.png" alt="" style="width: 100%; height: auto; margin-bottom: 20px;">
+            <p>
+              We train our feature extraction model to match the diffusion model's internal representations.
+              We initialize the feature extraction model as a trainable copy of the diffusion model.
+              Crucially, the feature extraction model is given the clean input image, while the diffusion model receives
+              the noisy image and the corresponding timestep as input.
+              Our goal is to obtain a single, noise-free feature map from the feature extraction model that consolidates
+              the information of the diffusion model's timestep-dependent internal representations into a single one.
+              To align our model's representations with the timestep-dependent diffusion model features during training,
+              we introduce point-wise timestep-conditioned feature projection heads.
+              The feature maps predicted by these projection heads are then aligned to the diffusion model's features.
+              For feature extraction at inference time, we usually discard the projection heads and directly use the
+              feature extraction model's internal representations.
+              However, the projection heads can also be used to efficiently obtain feature maps for specific timesteps
+              by reusing the feature extraction model's internal representations and passing them through the projection
+              heads for different t values.
+            </p>
+          </div>
+          <!-- <div class="content has-text-justified">
+          <p>
+            Text-to-image generative models have become a prominent and powerful tool that excels at generating
+            high-resolution realistic images. However, guiding the generative process of these models to consider
+            detailed forms of conditioning reflecting style and/or structure information remains an open problem. In
+            this paper, we present LoRAdapter, an approach that unifies both style and structure
+            conditioning under the same formulation using a novel conditional LoRA block that enables zero-shot
+            control. LoRAdapter is an efficient, powerful, and architecture-agnostic approach to condition
+            text-to-image diffusion models, which enables fine-grained control conditioning during generation and
+            outperforms recent state-of-the-art approaches.
+          </p>
+        </div> -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Quantitative Comparison</h2>
+          <div class="content">
+
+
+            <h3 class="title">Zero-Shot Semantic Correspondence</h3>
+            <img src="static/images/correspondence_table.png" alt="" style="max-width: 50%; height: auto; margin-bottom: 20px;">
+            <p class="has-text-justified" style="font-size: 16px;">
+              Zero-shot unsupervised semantic correspondence matching performance comparison on SPair-71k. Our improved
+              features consistently lead to substantial improvements in matching performance. Numbers show our reproductions.
+            </p>
+
+            <img src="static/images/correspondence_quantitative.png" alt="" style="max-width: 50%; height: auto; margin-bottom: 20px;">
+            <p class="has-text-justified" style="font-size: 16px;">
+              We evaluate semantic correspondence matching accuracy for different noise levels. Our feature extractor
+              outperforms the standard noisy diffusion features across all timesteps t.
+              We additionally demonstrate that simply providing the diffusion model with a clean image and a non-zero
+              timestep does not result in improved performance.
+            </p>
+            <h3 class="title">Monocular Depth Estimation</h3>
+            <img src="static/images/depth_table.png" alt="" style="max-width: 50%; height: auto; margin-bottom: 20px;">
+
+            <p class="has-text-justified" style="font-size: 16px;">
+              We evaluate metric depth prediction on NYUv2 using a linear probe.
+              Our clean features outperform the noisy features by a significant margin. Probes trained on the noisy
+              features can be reused for the clean features, but incur a smaller performance gain.
+            </p>
+            <h3 class="title">Semantic Segmentation</h3>
+            <img src="static/images/sem_seg_quantitative.png" alt="" style="max-width: 50%; height: auto; margin-bottom: 20px;">
+
+            <p class="has-text-justified" style="font-size: 16px;">
+              Performance on semantic segmentation for the PASCAL VOC dataset using linear probes. Our clean features
+              outperform the noisy diffusion features for the best noising timestep t.
+              Semantic segmentation performance of a standard diffusion model heavily depends on the used noising
+              timestep.
+              Unlike for semantic correspondence matching, the optimal t value appears to be around t=100.
+            </p>
+            <h3 class="title">Classification</h3>
+            <img src="static/images/classification_quantitative.png" alt="" style="margin-bottom: 20px;">
+
+            <p class="has-text-justified" style="font-size: 16px;">
+              Classification performance on ImageNet1k, using kNN classifier with k=10 and cosine similarity as the
+              distance metric. We sweep over different timesteps and feature maps.
+              We find that the feature map with the lowest spatial resolution (feature map #0) yields the highest
+              classification accuracy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+  <!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>BibTex Code Here</code></pre>
+    </div>
+  </section>
+  <!--End BibTex citation -->
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the
+              footer. <br> This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Statcounter tracking code -->
+
+  <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+  <!-- End of Statcounter Code -->
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+# @package _global_
+
+model:
+  _target_: src.depth.DepthPred
+  loss:
+    _target_: src.depth.SigLoss
+  model_config_path: ./configs/sd21_feature_extractor.yaml
+  diffusion_image_size: 768
+  channels: 1280
+  base_model_timestep: 199
+  use_base_model_features: false
+  adapter_timestep: null
+  interpolate_features: NONE
+
+hydra:
+  job:
+    chdir: false
+
+

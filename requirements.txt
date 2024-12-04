@@ -1,0 +1,11 @@
+accelerate
+diffusers>=0.27
+einops
+hydra-core
+jaxtyping
+numpy
+omegaconf
+torch>=2.1.0
+torchvision
+transformers
+tqdm
