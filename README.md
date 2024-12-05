@@ -12,7 +12,7 @@
 </p>
 
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://compvis.github.io/cleandift/)
-[![Paper](https://img.shields.io/badge/arXiv-PDF-b31b1b)](https://compvis.github.io/cleandift/static/pdfs/cleandift.pdf)
+[![Paper](https://img.shields.io/badge/arXiv-PDF-b31b1b)](https://arxiv.org/pdf/2412.03439)
 [![Weights](https://img.shields.io/badge/HuggingFace-Weights-orange)](https://huggingface.co/CompVis/cleandift)
 
 This repository contains the official implementation of the paper "CleanDIFT: Diffusion Features without Noise".
@@ -52,12 +52,13 @@ unet.load_state_dict(state_dict, strict=True)
 If you use this codebase or otherwise found our work valuable, please cite our paper:
 
 ```bibtex
-@misc{stracke2024cleandift,
-  title={CleanDIFT: Diffusion Features without Noise},
-  author={Nick Stracke and Stefan Andreas Baumann and Kolja Bauer and Frank Fundel and Björn Ommer},
-  year={2024},
-  eprint={????},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+@misc{stracke2024cleandiftdiffusionfeaturesnoise,
+      title={CleanDIFT: Diffusion Features without Noise}, 
+      author={Nick Stracke and Stefan Andreas Baumann and Kolja Bauer and Frank Fundel and Björn Ommer},
+      year={2024},
+      eprint={2412.03439},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2412.03439}, 
 }
 ```
