@@ -148,7 +148,7 @@
                 </span>
 
                 <!-- ArXiv abstract Link -->
-                
+
                 <span class="link-block">
                   <a href="https://arxiv.org/abs/2412.03439" target="_blank"
                     class="external-link button is-normal is-rounded is-dark">
@@ -158,7 +158,7 @@
                     <span>arXiv</span>
                   </a>
                 </span>
-                
+
 
                 <!-- HF weights Link -->
                 <span class="link-block">
@@ -612,6 +612,31 @@
   <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
 
   <!-- End of Statcounter Code -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // Get all "navbar-burger" elements
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+      // Add a click event on each of them
+      $navbarBurgers.forEach(el => {
+        el.addEventListener('click', () => {
+
+          // Get the target from the "data-target" attribute
+          // const target = el.dataset.target;
+          // const $target = document.getElementById(target);
+          menu = el.parentElement.parentElement.children[1]
+
+          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+          el.classList.toggle('is-active');
+          menu.classList.toggle('is-active');
+
+        });
+      });
+
+    });
+  </script>
 
 </body>
 
