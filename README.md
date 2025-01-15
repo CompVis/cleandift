@@ -1,43 +1,11 @@
-# Telling Left from Right: Identifying Geometry-Aware Semantic Correspondence
+# Eval Code for [CleanDIFT](https://github.com/CompVis/cleandift) in the setting of Telling Left from Right (GeoAware-SC)
+This is a fork of their [original repo](https://github.com/Junyi42/GeoAware-SC) that includes the changes required to load our CleanDIFT checkpoints and perform evaluations.
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/telling-left-from-right-identifying-geometry/semantic-correspondence-on-spair-71k)](https://paperswithcode.com/sota/semantic-correspondence-on-spair-71k?p=telling-left-from-right-identifying-geometry)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/telling-left-from-right-identifying-geometry/semantic-correspondence-on-pf-pascal)](https://paperswithcode.com/sota/semantic-correspondence-on-pf-pascal?p=telling-left-from-right-identifying-geometry)
+> [!IMPORTANT]  
+> The GeoAware-SC repo does not contain licensing information, making the licensing state of all the code taken from it unclear.
 
-**Telling Left from Right** identifies the problem of *geometry-aware semantic correspondence* and analyzes the geometric understanding of the pretrained features of foundation models, i.e., Stable Diffusion and DINOv2. We propose several techniques to improve it with a lightweight post-processor and achieve state-of-the-art performance on multiple benchmarks, e.g., **85.6** PCK@0.10 at SPair-71k. We also introduce a large-scale and challenging *semantic correspondence benchmark* based on AP-10k dataset, for both pretraining and evaluation.
 
-This repository is the official implementation of the paper:
-
-[**Telling Left from Right: Identifying Geometry-Aware Semantic Correspondence**](https://arxiv.org/abs/2311.17034)
-[*Junyi Zhang*](https://junyi42.github.io/),
-[*Charles Herrmann*](https://scholar.google.com/citations?user=LQvi5XAAAAAJ),
-[*Junhwa Hur*](https://hurjunhwa.github.io/),
-[*Eric Chen*](https://ezrc2.github.io/),
-[*Varun Jampani*](https://varunjampani.github.io/),
-[*Deqing Sun**](https://deqings.github.io/),
-[*Ming-Hsuan Yang**](https://faculty.ucmerced.edu/mhyang/)
-CVPR, 2024. [**[Project Page]**](https://telling-left-from-right.github.io) [**[Paper]**](https://telling-left-from-right.github.io/files/Telling_Left_from_Right_cr.pdf)
-
-![teaser](assets/teaser.svg)
-
-- [Telling Left from Right: Identifying Geometry-Aware Semantic Correspondence](#telling-left-from-right-identifying-geometry-aware-semantic-correspondence)
-  - [Environment Setup](#environment-setup)
-  - [Get Started](#get-started)
-    - [Prepare the data](#prepare-the-data)
-    - [Pre-extract the feature maps](#pre-extract-the-feature-maps)
-    - [(Optional) Pre-extract the instance masks](#optional-pre-extract-the-instance-masks)
-  - [Demo (Quick Start)](#demo)
-    - [Extrating/Visualization the post-processed features](#extratingvisualization-the-post-processed-features)
-    - [Global pose awareness analysis (Paper Sec. 3.4)](#global-pose-awareness-analysis-paper-sec-34)
-  - [Training/Evaluation](#trainingevaluation)
-    - [(Pre-)Training on the AP-10k dataset](#pre-training-on-the-ap-10k-dataset)
-    - [Training on the SPair-71k dataset (with pretrained weight)](#training-on-the-spair-71k-dataset-with-pretrained-weight)
-    - [Training on the PF-Pascal dataset (with pretrained weight)](#training-on-the-pf-pascal-dataset-with-pretrained-weight)
-  - [Inference](#inference)
-    - [Inference in the unsupervised setting](#inference-in-the-unsupervised-setting)
-    - [Inference in the supervised setting](#inference-in-the-supervised-setting)
-  - [Citation](#citation)
-  - [Acknowledgement](#acknowledgement)
-
+# Relevant parts of the original Readme
 
 ## Environment Setup
 
