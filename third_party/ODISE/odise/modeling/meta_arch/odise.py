@@ -207,17 +207,17 @@ class CategoryODISE(ODISE):
 
         return pred
     
-    def get_features(self, batched_inputs, caption=None, pca=None):
+    def get_features(self, batched_inputs, caption=None, pca=None, use_clean_features=False):
         images = [x["image"].to(self.device) for x in batched_inputs]
         images = [(x - self.pixel_mean) / self.pixel_std for x in images]
         images = ImageList.from_tensors(images, self.size_divisibility)
         if caption is not None:
-            features = self.backbone(images.tensor, caption, raw=pca)
+            features = self.backbone(images.tensor, caption, raw=pca, use_clean_features=use_clean_features)
         else:
-            features = self.backbone(images.tensor, raw=pca)
+            features = self.backbone(images.tensor, raw=pca, use_clean_features=use_clean_features)
         return features
     
-    def forward(self, batched_inputs):
+    def forward(self, batched_inputs, use_clean_features=False):
         """
         Args:
             batched_inputs: a list, batched outputs of :class:`DatasetMapper`.
@@ -252,7 +252,7 @@ class CategoryODISE(ODISE):
             [x["image"].to(self.device) / 255.0 for x in batched_inputs]
         )
 
-        features = self.backbone(images.tensor)
+        features = self.backbone(images.tensor, use_clean_features=use_clean_features)
         outputs = self.sem_seg_head(features)
         outputs["images"] = denormalized_images.tensor
 

@@ -68,7 +68,7 @@ class StableDiffusionSeg(object):
         self.cpu_device = torch.device("cpu")
         self.instance_mode = instance_mode
 
-    def get_features(self, original_image, caption=None, pca=None):
+    def get_features(self, original_image, caption=None, pca=None, use_clean_features=False):
         """
         Args:
             original_image (np.ndarray): an image of shape (H, W, C) (in BGR order).
@@ -85,9 +85,9 @@ class StableDiffusionSeg(object):
 
         inputs = {"image": image, "height": height, "width": width}
         if caption is not None:
-            features = self.model.get_features([inputs],caption,pca=pca)
+            features = self.model.get_features([inputs],caption,pca=pca, use_clean_features=use_clean_features)
         else:
-            features = self.model.get_features([inputs],pca=pca)
+            features = self.model.get_features([inputs],pca=pca, use_clean_features=use_clean_features)
         return features
     
     def predict(self, original_image):
@@ -204,7 +204,7 @@ def inference(model, aug, image, vocab, label_list):
         pred = demo.predict(np.array(image))
         return (pred, demo_classes)
     
-def get_features(model, aug, image, vocab, label_list, caption=None, pca=False):
+def get_features(model, aug, image, vocab, label_list, caption=None, pca=False, use_clean_features=False):
     
     demo_classes, demo_metadata = build_demo_classes_and_metadata(vocab, label_list)
     with ExitStack() as stack:
@@ -221,29 +221,25 @@ def get_features(model, aug, image, vocab, label_list, caption=None, pca=False):
 
         demo = StableDiffusionSeg(inference_model, demo_metadata, aug)
         if caption is not None:
-            features = demo.get_features(np.array(image), caption, pca=pca)
+            features = demo.get_features(np.array(image), caption, pca=pca, use_clean_features=use_clean_features)
         else:
-            features = demo.get_features(np.array(image), pca=pca)
+            features = demo.get_features(np.array(image), pca=pca, use_clean_features=use_clean_features)
         return features
 
 
-def process_features_and_mask(model, aug, image, category=None, input_text=None, mask=False, raw=True):
+def process_features_and_mask(model, aug, image, category=None, mask=False, raw=True, use_clean_features=False):
+
+    if category is None:
+        caption = None
+    else:
+        caption = f"A photo of a {category}"
 
     input_image = image
-    caption = input_text
+
     vocab = ""
     label_list = ["COCO"]
-    category_convert_dict={
-        'aeroplane':'airplane',
-        'motorbike':'motorcycle',
-        'pottedplant':'potted plant',
-        'tvmonitor':'tv',
-    }
-    if type(category) is not list and category in category_convert_dict:
-        category=category_convert_dict[category]
-    elif type(category) is list:
-        category=[category_convert_dict[cat] if cat in category_convert_dict else cat for cat in category]
-    features = get_features(model, aug, input_image, vocab, label_list, caption, pca=raw)
+
+    features = get_features(model, aug, input_image, vocab, label_list, caption, pca=raw, use_clean_features=use_clean_features)
     return features
 
 def get_mask(model, aug, image, category=None, input_text=None):

@@ -16,8 +16,9 @@ def set_seed(seed=42):
     np.random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
 
-def process_and_save_features(file_paths, real_size, img_size, layer, facet, model, aug, extractor_vit, flip=False, angle=0):
+def process_and_save_features(file_paths, real_size, img_size, layer, facet, model, aug, extractor_vit, flip=False, angle=0, use_clean_features=False):
     for file_path in tqdm(file_paths, desc="Processing images (Flip: {})".format(flip)):
+        category = file_path.split(os.path.sep)[-2]
         img1 = Image.open(file_path).convert('RGB')
         if flip:
             img1 = img1.transpose(Image.FLIP_LEFT_RIGHT)
@@ -27,7 +28,7 @@ def process_and_save_features(file_paths, real_size, img_size, layer, facet, mod
 
         accumulated_features = {}
         for _ in range(NUM_ENSEMBLE): 
-            features1 = process_features_and_mask(model, aug, img1_input, mask=False, raw=True)
+            features1 = process_features_and_mask(model, aug, img1_input, mask=False, raw=True, use_clean_features=use_clean_features, category=category)
             del features1['s2']
             for k in features1:
                 accumulated_features[k] = accumulated_features.get(k, 0) + features1[k]
@@ -55,16 +56,31 @@ if __name__ == '__main__':
     real_size, img_size, layer, facet = 960, 840, 11, 'token'
     NUM_ENSEMBLE = 1
 
+    unet_ckpt_path = sys.argv[2] if len(sys.argv) > 2 else None
+    diff_ver = sys.argv[3] if len(sys.argv) > 3 else 'v1-5'
+
+    print(f"Setting Diffusion Version to {diff_ver}")
+    print(f"LOADING CUSTOM STATE_DICT from {unet_ckpt_path}")
+
     # Load models
-    model, aug = load_model(diffusion_ver='v1-5', image_size=real_size, num_timesteps=50, block_indices=[2,5,8,11])
+    model, aug = load_model(diffusion_ver=diff_ver, image_size=real_size, num_timesteps=50, block_indices=[2,5,8,11])
     extractor_vit = ViTExtractor('dinov2_vitb14', 14, device='cuda')
+
+    if unet_ckpt_path is not None: # Optionally replace UNet with our checkpoint
+        unet_state_dict = torch.load(unet_ckpt_path)
+        model.backbone.feature_extractor.ldm_extractor.ldm.unet.load_state_dict(unet_state_dict, strict=True)
+        print(f"SUCCESFULLY LOADED CUSTOM STATE_DICT from {unet_ckpt_path}")
+        print(f"Diffusion Version is {diff_ver}")
+        use_clean_features = True
+    else:
+        use_clean_features = False
 
     all_files = [os.path.join(subdir, file) for subdir, dirs, files in os.walk(base_dir) for file in files if file.endswith('.jpg')]
 
     angles = [0] # angles for rotation
     for angle in angles:
         # Process and save features
-        process_and_save_features(all_files, real_size, img_size, layer, facet, model, aug, extractor_vit, flip=False, angle=angle)
-        process_and_save_features(all_files, real_size, img_size, layer, facet, model, aug, extractor_vit, flip=True, angle=angle)
+        process_and_save_features(all_files, real_size, img_size, layer, facet, model, aug, extractor_vit, flip=False, angle=angle, use_clean_features=use_clean_features)
+        process_and_save_features(all_files, real_size, img_size, layer, facet, model, aug, extractor_vit, flip=True, angle=angle, use_clean_features=use_clean_features)
 
     print("All processing done.")

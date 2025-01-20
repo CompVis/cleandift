@@ -660,7 +660,7 @@ class LdmExtractor(FeatureExtractor):
 
         return latent_image, ret_features
 
-    def unet_forward(self, x, timesteps, context, cond_emb=None):
+    def unet_forward(self, x, timesteps, context, cond_emb=None, use_clean_features=False):
         unet = self.ldm.unet
         ret_features = []
 
@@ -682,6 +682,9 @@ class LdmExtractor(FeatureExtractor):
                 if module in self.unet_blocks:
                     ret_features.append(h.contiguous())
                 h_out = hs.pop()
+
+                # DISABLE FreeU
+                '''
                 if self.freeu:
                     # --------------- FreeU code -----------------------
                     # Only operate on the first two stages
@@ -692,6 +695,7 @@ class LdmExtractor(FeatureExtractor):
                         h[:,:320] = h[:,:320] * self.b2
                         h_out = Fourier_filter(h_out, threshold=1, scale=self.s2)
                     # ---------------------------------------------------------
+                '''
                 h = torch.cat([h, h_out], dim=1)
                 h = module(h, emb, context)
 
@@ -834,7 +838,7 @@ class LdmExtractor(FeatureExtractor):
 
         return dec, ret_features
 
-    def forward(self, batched_inputs):
+    def forward(self, batched_inputs, use_clean_features=False):
         """
         Args:
             batched_inputs (dict): expected keys: "img", Optional["caption"]
@@ -874,6 +878,9 @@ class LdmExtractor(FeatureExtractor):
                 noisy_latent_image = latent_image
                 # use 0 as no noise timestep
                 t = torch.tensor([0], device=self.device).expand(batch_size)
+            elif use_clean_features:
+                noisy_latent_image = latent_image
+                t = torch.tensor([261], device=self.device).expand(batch_size)
             else:
                 t = torch.tensor([t], device=self.device).expand(batch_size)
                 if self.shared_noise is not None:
@@ -894,7 +901,7 @@ class LdmExtractor(FeatureExtractor):
                 noisy_latent_image = self.ldm.diffusion.q_sample(latent_image, t, noise)
             # self.ldm.ldm.apply_model(noisy_latent_image, t, cond_inputs)
             _, cond_unet_features = self.unet_forward(
-                noisy_latent_image, t, cond_inputs, cond_emb=cond_emb
+                noisy_latent_image, t, cond_inputs, cond_emb=cond_emb, use_clean_features=use_clean_features
             )
             unet_features.extend(cond_unet_features)
 
@@ -951,7 +958,7 @@ class LdmImplicitCaptionerExtractor(nn.Module):
         )
         self.alpha_cond = nn.Parameter(torch.zeros_like(self.ldm_extractor.ldm.uncond_inputs))
 
-        self.learnable_time_embed = learnable_time_embed
+        self.learnable_time_embed = False # Do not use learned CLIP conditioning from ODISE
 
         if self.learnable_time_embed:
             # self.ldm_extractor.ldm.unet.time_embed is nn.Sequential
@@ -989,7 +996,7 @@ class LdmImplicitCaptionerExtractor(nn.Module):
     def extra_repr(self):
         return f"learnable_time_embed={self.learnable_time_embed}"
 
-    def forward(self, batched_inputs):
+    def forward(self, batched_inputs, use_clean_features=False):
         """
         Args:
             batched_inputs (dict): expected keys: "img", Optional["caption"]
@@ -1013,7 +1020,7 @@ class LdmImplicitCaptionerExtractor(nn.Module):
 
         self.set_requires_grad(self.training)
 
-        return self.ldm_extractor(batched_inputs)
+        return self.ldm_extractor(batched_inputs, use_clean_features=use_clean_features)
 
     def set_requires_grad(self, requires_grad):
         for p in self.ldm_extractor.ldm.ldm.model.parameters():

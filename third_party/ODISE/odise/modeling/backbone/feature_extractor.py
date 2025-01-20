@@ -135,7 +135,7 @@ class FeatureExtractorBackbone(Backbone):
                 module.ignored_state_dict(destination, prefix + name + ".")
         return destination
 
-    def single_forward(self, img, caption=None, raw=False):
+    def single_forward(self, img, caption=None, raw=False, use_clean_features=False):
 
         # save memory
         input_image_size = img.shape[-2:]
@@ -145,9 +145,9 @@ class FeatureExtractorBackbone(Backbone):
         img = ImageList.from_tensors(list(img), self.size_divisibility).tensor
         # print("padded size:", img.shape)
         if caption is not None:
-            features = self.feature_extractor(dict(img=img, caption=caption))
+            features = self.feature_extractor(dict(img=img, caption=caption), use_clean_features=use_clean_features)
         else:
-            features = self.feature_extractor(dict(img=img))
+            features = self.feature_extractor(dict(img=img), use_clean_features=use_clean_features)
         if raw:
             out_features = {}
             out_features['s5']=features[2]
@@ -157,12 +157,12 @@ class FeatureExtractorBackbone(Backbone):
             return out_features
         if self.use_checkpoint:
             return checkpoint.checkpoint(
-                self.forward_features, features, input_image_size, use_reentrant=False
+                self.forward_features, features, input_image_size, use_reentrant=False, use_clean_features=use_clean_features
             )
         else:
-            return self.forward_features(features, input_image_size)
+            return self.forward_features(features, input_image_size, use_clean_features=use_clean_features)
 
-    def forward_features(self, features, input_image_size):
+    def forward_features(self, features, input_image_size, use_clean_features=False):
         output_features = {}
         for name, indices in zip(self._out_features, self._sorted_grouped_indices):
             output_feature = None
@@ -186,7 +186,7 @@ class FeatureExtractorBackbone(Backbone):
 
         return output_features
 
-    def slide_forward(self, img, caption=None, raw=False):
+    def slide_forward(self, img, caption=None, raw=False, use_clean_features=False):
         scale = 2 if raw else 1
         channel_scale = {'s5': self.channel_scale[0], 's4': self.channel_scale[1], 's3': self.channel_scale[2], 's2': self.channel_scale[3]} if raw else {'s5': 1, 's4': 1, 's3': 1, 's2': 1} #todo
         batch_size, _, h_img, w_img = img.shape
@@ -233,7 +233,7 @@ class FeatureExtractorBackbone(Backbone):
                 crop_img = img[:, :, y1:y2, x1:x2] #(1,3,512,512)
                 assert crop_img.shape[-2:] == (h_crop, w_crop), f"{crop_img.shape} from {img.shape}"
                 # print("crop_img.shape:", crop_img.shape)
-                crop_features = self.single_forward(crop_img,caption=caption,raw=raw)
+                crop_features = self.single_forward(crop_img,caption=caption,raw=raw, use_clean_features=use_clean_features)
                 for k in crop_features:
                     k_x1 = x1 // (self._out_feature_strides[k] * scale)
                     k_x2 = x2 // (self._out_feature_strides[k] * scale)
@@ -258,8 +258,8 @@ class FeatureExtractorBackbone(Backbone):
 
         return output_features
 
-    def forward(self, img, caption=None, raw=False):
+    def forward(self, img, caption=None, raw=False, use_clean_features=False):
         if (self.training and not self._slide_training) or not self._slide_inference:
-            return self.single_forward(img,caption,raw)
+            return self.single_forward(img,caption,raw, use_clean_features=use_clean_features)
         else:
-            return self.slide_forward(img,caption,raw)
+            return self.slide_forward(img,caption,raw, use_clean_features=use_clean_features)

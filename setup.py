@@ -15,12 +15,14 @@ setup(
         "loguru>=0.5.3",
         "faiss-cpu>=1.7.1",
         "matplotlib>=3.4.2",
+        "pillow==9.4.0",
         "tqdm>=4.61.2",
-        "numpy>=1.21.0",
+        "numpy>=1.21.0,<2.0.1",
         "gdown>=4.6.0",
         "wandb>=0.16.0",
+        "safetensors",
         f"mask2former @ file://localhost/{os.getcwd()}/third_party/Mask2Former/",
-        f"odise @ file://localhost/{os.getcwd()}/third_party/ODISE/"
+        f"odise @ file://localhost/{os.getcwd()}/third_party/ODISE/",
     ],
     include_package_data=True,
 )
