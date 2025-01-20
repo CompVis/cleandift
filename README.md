@@ -47,6 +47,9 @@ state_dict = load_file(ckpt_pth)
 unet.load_state_dict(state_dict, strict=True)
 ```
 
+#### Combination with Telling Left From Right (TLFR)
+Our checkpoints can also be combined with more advanced feature extraction methods than [DIFT](https://diffusionfeatures.github.io/), such as [TLFR](https://telling-left-from-right.github.io/). We provide an adapted version of their codebase that can be used to reproduce our state-of-the-art zero-shot semantic correspondence results in the [`geoaware-sc-eval`](https://github.com/CompVis/cleandift/tree/geoaware-sc-eval) branch.
+
 ## 🎓 Citation
 
 If you use this codebase or otherwise found our work valuable, please cite our paper:
