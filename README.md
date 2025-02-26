@@ -7,8 +7,7 @@
   <a href="https://ommer-lab.com/people/ommer/" target="_blank">Björn Ommer</a>
 </div>
 <p align="center"> 
-  <b>CompVis Group @ LMU Munich</b> <br/>
-  <sup>*</sup> Equal Contribution
+  <b>CompVis @ LMU Munich</b><br/>CVPR 2025
 </p>
 
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://compvis.github.io/cleandift/)
@@ -55,13 +54,10 @@ Our checkpoints can also be combined with more advanced feature extraction metho
 If you use this codebase or otherwise found our work valuable, please cite our paper:
 
 ```bibtex
-@misc{stracke2024cleandiftdiffusionfeaturesnoise,
-      title={CleanDIFT: Diffusion Features without Noise}, 
-      author={Nick Stracke and Stefan Andreas Baumann and Kolja Bauer and Frank Fundel and Björn Ommer},
-      year={2024},
-      eprint={2412.03439},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2412.03439}, 
+@inproceedings{stracke2025cleandift,
+    title={CleanDIFT: Diffusion Features without Noise}, 
+    author={Nick Stracke and Stefan Andreas Baumann and Kolja Bauer and Frank Fundel and Björn Ommer},
+    booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+    year={2025}
 }
 ```
