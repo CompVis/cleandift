@@ -7,7 +7,7 @@
   <a href="https://ommer-lab.com/people/ommer/" target="_blank">Björn Ommer</a>
 </div>
 <p align="center"> 
-  <b>CompVis @ LMU Munich</b><br/>CVPR 2025
+  <b>CompVis @ LMU Munich</b><br/>CVPR 2025 (Oral)
 </p>
 
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://compvis.github.io/cleandift/)
@@ -18,7 +18,7 @@ This repository contains the official implementation of the paper "CleanDIFT: Di
 
 We propose CleanDIFT, a novel method to extract noise-free, timestep-independent features by enabling diffusion models to work directly with clean input images. Our approach is efficient, training on a single GPU in just 30 minutes.
 
-![teaser](./docs/static/images/teaser_fig.png)
+![teaser](./docs/static/images/teaser_fig.jpg)
 
 ## 🚀 Usage
 
